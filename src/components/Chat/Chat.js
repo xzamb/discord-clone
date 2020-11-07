@@ -30,7 +30,7 @@ const Chat = () => {
 
        firebaseDatabase.collection("channels")
        .doc(channelId).collection("messages")
-       .orderBy("timestamp", "desc")
+       .orderBy("timestamp", "asc")
        .onSnapshot(snapshot => {
            setMessages(
                 snapshot.docs.map(doc => {
@@ -48,6 +48,8 @@ const Chat = () => {
     const handleSendMessage = e => {
         e.preventDefault();
 
+        if(!input.trim()) return;
+
         firebaseDatabase.collection("channels") 
             .doc(channelId)
             .collection("messages")
@@ -61,11 +63,11 @@ const Chat = () => {
     }
 
 
-    const handleDeleteMessage = (messageId) => {
+    const handleDeleteMessage = ({id}) => {
         firebaseDatabase.collection("channels")
             .doc(channelId)
             .collection("messages")
-            .doc(messageId)
+            .doc(id)
             .delete();
     }
 
@@ -76,10 +78,8 @@ const Chat = () => {
             <div className="chat__messages">
                 {messages.map(message => {
                     return <Message
-                        handleOnDeleteMessage={() => handleDeleteMessage(message.id)}
-                        message={message.data.message}
-                        timestamp={message.data.timestamp}
-                        user={message.data.user}
+                        handleOnDeleteMessage={() => handleDeleteMessage(message)}
+                        data={message.data}
                     />
                 })}
             </div>

@@ -1,26 +1,33 @@
 import React from 'react'
 import './Message.css';
 
+import {useSelector} from 'react-redux';
+
 import {Avatar} from '@material-ui/core';
 import {Button} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-const Message = ({message, timestamp, user, handleOnDeleteMessage}) => {
+import {selectUser} from '../../features/userSlice';
+
+const Message = ({data, handleOnDeleteMessage}) => {
+
+    const loggedUser = useSelector(selectUser);
+
     return (
         <div className="message">
-            <Avatar src={user.photo} />
+            <Avatar src={data.user.photo} />
             <div className="message__info">
                 <h4>
-                    {user.displayName}
+                    {data.user.displayName}
                     <span className="message__timestamp">
-                        {new Date(timestamp?.toDate()).toUTCString()}
+                        {new Date(data.timestamp?.toDate()).toUTCString()}
                     </span>
                 </h4>
-                <p>{message}</p>
+                <p>{data.message}</p>
             </div>
-            <DeleteIcon
+            {data.user.id === loggedUser.id && <DeleteIcon
                 className="message__deleteIcon"
-                onClick={handleOnDeleteMessage} />
+                onClick={handleOnDeleteMessage} />}
         </div>
     )
 }
