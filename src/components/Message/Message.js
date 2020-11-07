@@ -2,8 +2,10 @@ import React from 'react'
 import './Message.css';
 
 import {Avatar} from '@material-ui/core';
+import {Button} from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 
-const Message = ({message, timestamp, user}) => {
+const Message = ({message, timestamp, user, handleOnDeleteMessage}) => {
     return (
         <div className="message">
             <Avatar src={user.photo} />
@@ -16,6 +18,9 @@ const Message = ({message, timestamp, user}) => {
                 </h4>
                 <p>{message}</p>
             </div>
+            <DeleteIcon
+                className="message__deleteIcon"
+                onClick={handleOnDeleteMessage} />
         </div>
     )
 }
